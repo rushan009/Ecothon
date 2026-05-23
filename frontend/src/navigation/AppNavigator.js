@@ -1,8 +1,9 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import RoleSelectScreen from '../screens/RoleSelectScreen';
-import AdminDashboardScreen from '../screens/AdminScreen';
+import AuthLandingScreen from '../screens/auth/AuthLandingScreen';
+import AuthOnboardingScreen from '../screens/auth/AuthOnboardingScreen';
+import AuthLoginScreen from '../screens/auth/AuthLoginScreen';
 import {
   PickupBookingScreen,
   PickupCompleteScreen,
@@ -11,30 +12,15 @@ import {
   ScrapPricesScreen,
   LiveTrackingScreen,
   UserHomeScreen,
-  UserLoginScreen,
-  UserOnboardingScreen,
   UserProfileScreen,
   WasteScannerScreen,
   userTabBar,
 } from '../screens/UserScreens';
-import {
-  CollectorActivePickupScreen,
-  CollectorConfirmCollectionScreen,
-  CollectorDashboardScreen,
-  CollectorEarningsScreen,
-  CollectorHistoryScreen,
-  CollectorLoginScreen,
-  CollectorMapScreen,
-  CollectorProfileScreen,
-  collectorTabBar,
-} from '../screens/CollectorScreens';
 import { colors } from '../theme/tokens';
 
 const RootStack = createNativeStackNavigator();
 const UserStack = createNativeStackNavigator();
-const CollectorStack = createNativeStackNavigator();
 const UserTabs = createBottomTabNavigator();
-const CollectorTabs = createBottomTabNavigator();
 
 function UserTabNavigator() {
   return (
@@ -61,28 +47,6 @@ function UserFlow() {
   );
 }
 
-function CollectorTabNavigator() {
-  return (
-    <CollectorTabs.Navigator tabBar={collectorTabBar} screenOptions={{ headerShown: false }}>
-      <CollectorTabs.Screen name="Jobs" component={CollectorDashboardScreen} />
-      <CollectorTabs.Screen name="Map" component={CollectorMapScreen} />
-      <CollectorTabs.Screen name="History" component={CollectorHistoryScreen} />
-      <CollectorTabs.Screen name="Earnings" component={CollectorEarningsScreen} />
-      <CollectorTabs.Screen name="Profile" component={CollectorProfileScreen} />
-    </CollectorTabs.Navigator>
-  );
-}
-
-function CollectorFlow() {
-  return (
-    <CollectorStack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
-      <CollectorStack.Screen name="CollectorTabs" component={CollectorTabNavigator} />
-      <CollectorStack.Screen name="CollectorActivePickup" component={CollectorActivePickupScreen} />
-      <CollectorStack.Screen name="CollectorConfirmCollection" component={CollectorConfirmCollectionScreen} />
-    </CollectorStack.Navigator>
-  );
-}
-
 export default function AppNavigator() {
   return (
     <NavigationContainer
@@ -95,15 +59,10 @@ export default function AppNavigator() {
       }}
     >
       <RootStack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
-        <RootStack.Screen name="RoleSelect" component={RoleSelectScreen} />
-        <RootStack.Screen name="UserOnboarding" component={UserOnboardingScreen} />
-        <RootStack.Screen name="UserLogin" component={UserLoginScreen} />
+        <RootStack.Screen name="AuthLanding" component={AuthLandingScreen} />
+        <RootStack.Screen name="AuthOnboarding" component={AuthOnboardingScreen} />
+        <RootStack.Screen name="UserLogin" component={AuthLoginScreen} />
         <RootStack.Screen name="UserApp" component={UserFlow} />
-
-        <RootStack.Screen name="CollectorLogin" component={CollectorLoginScreen} />
-        <RootStack.Screen name="CollectorApp" component={CollectorFlow} />
-
-        <RootStack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

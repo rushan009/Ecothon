@@ -3,12 +3,13 @@ import { Outfit_400Regular, Outfit_500Medium, Outfit_600SemiBold, Outfit_700Bold
 import { LanguageProvider } from './src/i18n/LanguageContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { OfflineBanner } from './src/components/ui';
+import AuthFlow from './src/screens/auth/AuthFlow';
 
 function AppShell() {
   return (
     <View style={{ flex: 1 }}>
       <OfflineBanner />
-      <AppNavigator />
+      <AuthFlow AppNavigator={AppNavigator} />
     </View>
   );
 }
