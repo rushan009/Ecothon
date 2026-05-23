@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GlassCard, GradientButton, GhostButton, Input } from '../ui';
 import { colors, spacing, typography } from '../../theme/tokens';
 
@@ -7,8 +7,11 @@ export function AuthLoginForm({
   subtitle,
   phone,
   onChangePhone,
+  password,
+  onChangePassword,
   onContinue,
   onBack,
+  onCreateAccount,
   footerText,
   primaryButtonLabel = 'Continue',
   secondaryButtonLabel,
@@ -30,6 +33,18 @@ export function AuthLoginForm({
           <Input value={phone} onChangeText={onChangePhone} placeholder="98XXXXXXXX" prefix="🇳🇵 +977" keyboardType="phone-pad" />
         </View>
 
+        {onChangePassword ? (
+          <View style={styles.fieldBlock}>
+            <Text style={styles.label}>PASSWORD</Text>
+            <Input
+              value={password}
+              onChangeText={onChangePassword}
+              placeholder="••••••••"
+              secureTextEntry
+            />
+          </View>
+        ) : null}
+
         <GradientButton label={primaryButtonLabel} onPress={onContinue} />
 
         <View style={styles.separatorRow}>
@@ -40,7 +55,11 @@ export function AuthLoginForm({
 
         {secondaryButtonLabel ? <GhostButton label={secondaryButtonLabel} onPress={onContinue} style={styles.secondaryButton} /> : null}
 
-        {secondaryLinkLabel ? <Text style={styles.linkText}>{secondaryLinkLabel}</Text> : null}
+        {secondaryLinkLabel ? (
+          <Pressable onPress={onCreateAccount} hitSlop={8}>
+            <Text style={styles.linkText}>{secondaryLinkLabel}</Text>
+          </Pressable>
+        ) : null}
 
         <Text style={styles.footer}>{footerText}</Text>
       </GlassCard>

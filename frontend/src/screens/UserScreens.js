@@ -17,11 +17,13 @@ import {
   ProgressBar,
   ScreenEnter,
 } from '../components/ui';
-import { endpoints } from '../api/client';
+import { endpoints, setAccessToken } from '../api/client';
 import { MOCK_COLLECTORS, MOCK_USER, SCRAP_RATES, USER_PICKUPS } from '../data/mockData';
 import { useTranslation } from '../i18n/LanguageContext';
 import { colors, spacing, typography } from '../theme/tokens';
 import { formatKg, formatNPR, getTrendArrow } from '../utils/format';
+import { clearAuthTokens, getRefreshToken } from '../features/auth/authStorage';
+import { logoutUser } from '../features/auth/authApi';
 
 export function UserOnboardingScreen({ navigation }) {
   const { t, language, setLanguage } = useTranslation();
@@ -118,6 +120,27 @@ export function UserLoginScreen({ navigation }) {
 
 export function UserHomeScreen({ navigation }) {
   const { language, t } = useTranslation();
+  const handleSignOut = () => {
+    const rootNav = navigation?.getParent?.()?.getParent?.() || navigation?.getParent?.() || navigation;
+
+    const doLogout = async () => {
+      try {
+        const refreshToken = await getRefreshToken();
+        if (refreshToken) {
+          await logoutUser({ refreshToken });
+        }
+      } finally {
+        await clearAuthTokens();
+        setAccessToken(null);
+        rootNav?.reset?.({
+          index: 0,
+          routes: [{ name: 'AuthLanding' }],
+        });
+      }
+    };
+
+    doLogout();
+  };
 
   return (
     <ScreenEnter>
@@ -127,7 +150,10 @@ export function UserHomeScreen({ navigation }) {
             <Text style={styles.greeting}>{language === 'np' ? 'नमस्ते, Priya! 👋' : 'Namaste, Priya! 👋'}</Text>
             <Text style={styles.subMuted}>{language === 'np' ? 'आजको वातावरणीय प्रभाव हेर्नुहोस्' : 'Track your impact today'}</Text>
           </View>
-          <Text style={styles.avatar}>👩</Text>
+          <View style={styles.homeActions}>
+            <GhostButton label="Sign Out" onPress={handleSignOut} />
+            <Text style={styles.avatar}>👩</Text>
+          </View>
         </View>
 
         <LinearGradient colors={['rgba(22,163,74,0.12)', 'rgba(13,148,136,0.12)']} style={styles.statsCard}>
@@ -531,6 +557,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  homeActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
   greeting: {
     ...typography.headlineMd,

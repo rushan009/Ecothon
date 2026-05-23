@@ -4,6 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AuthLandingScreen from '../screens/auth/AuthLandingScreen';
 import AuthOnboardingScreen from '../screens/auth/AuthOnboardingScreen';
 import AuthLoginScreen from '../screens/auth/AuthLoginScreen';
+import AuthSignupScreen from '../screens/auth/AuthSignupScreen';
+import RoleSelectionScreen from '../screens/auth/RoleSelectionScreen';
+import RegistrationDetailsScreen from '../screens/auth/RegistrationDetailsScreen';
 import {
   PickupBookingScreen,
   PickupCompleteScreen,
@@ -47,7 +50,7 @@ function UserFlow() {
   );
 }
 
-export default function AppNavigator() {
+export default function AppNavigator({ initialRouteName = 'AuthLanding' }) {
   return (
     <NavigationContainer
       theme={{
@@ -58,10 +61,16 @@ export default function AppNavigator() {
         },
       }}
     >
-      <RootStack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+      <RootStack.Navigator
+        screenOptions={{ headerShown: false, animation: 'slide_from_right' }}
+        initialRouteName={initialRouteName}
+      >
         <RootStack.Screen name="AuthLanding" component={AuthLandingScreen} />
         <RootStack.Screen name="AuthOnboarding" component={AuthOnboardingScreen} />
         <RootStack.Screen name="UserLogin" component={AuthLoginScreen} />
+        <RootStack.Screen name="AuthSignup" component={AuthSignupScreen} />
+        <RootStack.Screen name="AuthRoleSelection" component={RoleSelectionScreen} />
+        <RootStack.Screen name="AuthRegistrationDetails" component={RegistrationDetailsScreen} />
         <RootStack.Screen name="UserApp" component={UserFlow} />
       </RootStack.Navigator>
     </NavigationContainer>
